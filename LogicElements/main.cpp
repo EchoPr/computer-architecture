@@ -10,14 +10,19 @@
 #include "logic_shapes.h"
 
 
+#define TESTS
+
+
 int main ()
 try
 {
+#ifndef TESTS
   int win_w = 600;
   int win_h = 400;
   Graph_lib::Point lt{ Graph_lib::x_max()/2 - win_w/2, Graph_lib::y_max()/2 - win_h/2 };
   Simple_window win{ lt, win_w, win_h, "Scheme of Logic Elements" };
   //win.wait_for_button();
+#endif
 
   using namespace Logic;
 
@@ -28,18 +33,23 @@ try
 
   Xor xor_lhs{ Out_state::inverted };
   Xor xor_rhs{ Out_state::inverted };
-  Xor xor_res{ Out_state::inverted };
+  Xor xor_mhs{ Out_state::inverted };;
+  And res;
 
 
   src1 >> xor_lhs;
   src2 >> xor_lhs;
+  src2 >> xor_mhs;
+  src3 >> xor_mhs;
   src3 >> xor_rhs;
   src4 >> xor_rhs;
 
-  xor_lhs >> xor_res;
-  xor_rhs >> xor_res;
+  xor_lhs >> res;
+  xor_rhs >> res;
+  xor_mhs >> res;
 
 
+#ifndef TESTS
   //
   SchemeShape scheme{ Graph_lib::Point{5, 5}, win_w - 80, win_h - 10 };
 
@@ -61,13 +71,15 @@ try
   SourceShape src_shape4{ scheme, src4, "src4", Graph_lib::Point{ column_x(0), line_y(3) } };
 
   XorShape xor_shape1{ scheme, xor_lhs, "xor1", Graph_lib::Point{ column_x(2), line_y(0) + 50 } };
-  XorShape xor_shape2{ scheme, xor_rhs, "xor2", Graph_lib::Point{ column_x(2), line_y(2) + 50 } };
+  XorShape xor_shape2{ scheme, xor_mhs, "xor2", Graph_lib::Point{ column_x(2), line_y(1) + 50 } };
+  XorShape xor_shape3{ scheme, xor_rhs, "xor3", Graph_lib::Point{ column_x(2), line_y(2) + 50 } };
 
-  XorShape xor_shape3{ scheme, xor_res, "xor3", Graph_lib::Point{ column_x(4), line_y(1) + 50 } };
+  AndShape and_shape{ scheme, res, "res", Graph_lib::Point{ column_x(4), line_y(1) + 50 } };
 
   scheme.update_connections();
 
   std::cout << "\nEnter a 4 source signals in one row (for example >> 1 0 1 1)\n>> ";
+
   
   int data[4];
   for (int i = 0; i < 4; i++)
@@ -78,9 +90,32 @@ try
   src3 = data[2];
   src4 = data[3];
 
-  std::cout << "Result is " << bool(xor_res) << std::endl;
+  std::cout << "Result is " << bool(res) << std::endl;
+
 
   win.wait_for_button();
+#endif
+
+#ifdef TESTS
+  for (int i = 0; i < 2; i++)
+    for (int j = 0; j < 2; j++)
+      for (int k = 0; k < 2; k++)
+        for (int l = 0; l < 2; l++)
+          {
+            src1 = i;
+            src2 = j;
+            src3 = k;
+            src4 = l;
+
+            if (bool(res) == ((i + j + k + l) % 4 == 0))
+              printf("Test: %d %d %d %d passed\n", i, j, k, l);
+            else{
+              printf("Test: %d %d %d %d FAILED!\n", i, j, k, l);
+              throw std::runtime_error(":(");
+            }
+          }
+#endif
+
 
 }
 catch (std::exception& e)
