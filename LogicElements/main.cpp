@@ -26,9 +26,10 @@ try
   Source src3;
   Source src4;
 
-  Xor xor_lhs;
-  Xor xor_rhs;
-  Xor xor_res;
+  Xor xor_lhs{ Out_state::inverted };
+  Xor xor_rhs{ Out_state::inverted };
+  Xor xor_res{ Out_state::inverted };
+
 
   src1 >> xor_lhs;
   src2 >> xor_lhs;
@@ -66,7 +67,7 @@ try
 
   scheme.update_connections();
 
-  std::cout << "Enter a 4 source signals in one row (for example >> 1 0 1 1)\n>> ";
+  std::cout << "\nEnter a 4 source signals in one row (for example >> 1 0 1 1)\n>> ";
   
   int data[4];
   for (int i = 0; i < 4; i++)
@@ -76,6 +77,8 @@ try
   src2 = data[1];
   src3 = data[2];
   src4 = data[3];
+
+  std::cout << "Result is " << bool(xor_res) << std::endl;
 
   win.wait_for_button();
 

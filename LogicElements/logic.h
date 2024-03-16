@@ -168,8 +168,8 @@ protected:
 class Xor : public Operation
 {
 public:
-  explicit Xor(Out_state out_inverted = Out_state::direct, Logic_callback f = nullptr)
-    : Operation{ out_inverted, f }
+  explicit Xor(Out_state st = Out_state::direct, Logic_callback f = nullptr)
+    : Operation{ st, f }
   {}
 
 protected:

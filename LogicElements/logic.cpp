@@ -106,18 +106,13 @@ void Or::calc ()
 
 void Xor::calc ()
 {
-  bool res{ false };
+  bool res{ bool(this) };
 
-  Or left;
-  And right{ Out_state::inverted };
-  Or xor_res;
+  for (auto& el : get_inputs()){
+    res ^= bool(el);
+  }
 
-  (*this) >> left;
-  (*this) >> right;
-  left >> xor_res;
-  right >> xor_res;
-
-  set(bool(xor_res));
+  set(!res);
 }
 
 } // namespace Logic
