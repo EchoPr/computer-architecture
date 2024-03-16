@@ -337,5 +337,43 @@ void XorShape::draw_lines () const
   ellipse.draw();
 }
 
+ImpShape::ImpShape (SchemeShape& scheme,
+                  Imp& e,
+                  const std::string& name,
+                  const Point& pos,  // left top
+                  int width /* = DEFAULT_WIDTH */, int height /* = DEFAULT_HEIGHT */)
+  : OperatorShape { scheme, e, name, pos, width, height }
+  , ellipse  { Point{pos.x, pos.y + height/2 + 1}, width, height/2 + 1 }
+{
+  ellipse.set_style(SHAPE_LINE_TYPE);
+
+  Graph_lib::Color c = elem.inverted() ? (elem ? FALSE_COLOR : TRUE_COLOR)
+                                       : (elem ? TRUE_COLOR : FALSE_COLOR);
+  ellipse.set_color(c);
+}
+
+Point ImpShape::input_pos (const Element& e, size_t i) const
+{
+  auto p =  OperatorShape::input_pos(e, i);
+  return p + Point{ -int(ellipse.major()), 0 };
+}
+
+void ImpShape::on_change (const Element& e)
+{
+  OperatorShape::on_change(e);
+
+  Graph_lib::Color c = e.inverted() ? (e ? FALSE_COLOR : TRUE_COLOR)
+                                    : (e ? TRUE_COLOR : FALSE_COLOR);
+  ellipse.set_color(c);
+}
+
+void ImpShape::draw_lines () const
+{
+  OperatorShape::draw_lines();
+
+  ellipse.draw();
+}
+
+
 
 } // namespace Logic

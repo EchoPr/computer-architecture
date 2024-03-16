@@ -115,4 +115,15 @@ void Xor::calc ()
   set(res);
 }
 
+void Imp::calc ()
+{
+  bool res{ 1 };
+
+  for (auto& el : get_inputs()){
+    res = res <= bool(el);
+  }
+
+  set(res);
+}
+
 } // namespace Logic

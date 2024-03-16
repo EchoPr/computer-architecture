@@ -176,6 +176,17 @@ protected:
   virtual void calc () override;
 };
 
+class Imp : public Operation
+{
+public:
+  explicit Imp(Out_state st = Out_state::direct, Logic_callback f = nullptr)
+    : Operation{ st, f }
+  {}
+
+protected:
+  virtual void calc () override;
+};
+
 } // namespace Logic
 
 #endif // LOGIC_H

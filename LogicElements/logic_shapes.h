@@ -195,6 +195,26 @@ protected:
   Graph_lib::Ellipse ellipse;
 };
 
+class ImpShape : public OperatorShape
+{
+public:
+  ImpShape (SchemeShape& scheme,
+           Imp& e,
+           const std::string& name,
+           const Graph_lib::Point& pos,  // left top
+           int width = DEFAULT_WIDTH, int height = DEFAULT_HEIGHT);
+
+  virtual Graph_lib::Point input_pos (const Element& e, size_t i) const override;
+
+  virtual void on_change (const Element& e) override;
+
+protected:
+  virtual void draw_lines () const override;
+
+  // shapes of the body
+  Graph_lib::Ellipse ellipse;
+};
+
 };
  
 // namespace Logic
