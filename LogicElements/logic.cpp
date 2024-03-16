@@ -106,13 +106,13 @@ void Or::calc ()
 
 void Xor::calc ()
 {
-  bool res{ bool(this) };
+  bool res{ 0 };
 
   for (auto& el : get_inputs()){
     res ^= bool(el);
   }
 
-  set(!res);
+  set(res);
 }
 
 } // namespace Logic
